@@ -10,33 +10,44 @@ import {
   Tooltip,
   calc,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UilMicrophone } from "@iconscout/react-unicons";
 import microphone from "../images/microphone.png";
 import Speaking from "./Speaking";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RunPythonAction } from "../redux/actions/runPythonAction";
 import Directions from "./Directions";
 
 const FirstSection = () => {
     const [speakNow , setSpeakNow] = useState(false)
+    const [showDirection , setShowDirection] = useState(false)
+    const [showMenu , setShowMenu] = useState(false)
     const dispatch = useDispatch()
 
     const handleOnSpeak = ()=>{
         dispatch(RunPythonAction)
         setSpeakNow(true)
+        setShowMenu(true)
     }
+    const {loading , data , isGetData} = useSelector((state)=> state.runPython)
+
+    useEffect(()=>{
+     if(isGetData){
+      console.log("inside get data")
+      setShowDirection(true)
+     } 
+    },[isGetData,showDirection])
   return (
     <>
       {/* <Box bg='red' w='100%'  h={{ base: `calc(100% - 25vw)`,md: `calc(100% - 18vw)`,lg: `calc(100% - 6vw)`}}> */}
       <Box
         bg="#EFF8E7"
         w="100%"
-        h={{ base: "115vh", md: "90vh" }}
+        h={{ base: "150vh", md: "110vh" }}
         display={{ base: "block", lg: "flex" }}
         flexDirection="row"
       >
-          <Box order={{lg:'1'}} mb={{base:'3vw' , lg:'0vw'}} w={{ lg: "35%" }} bg="#CFEBB7" h={{base:'60%', lg: "100%" }}>
+          <Box order={{lg:'1'}} mb={{base:'3vw' , lg:'0vw'}} w={{ lg: "40%" }} bg="#CFEBB7" h={{base:'60%', lg: "100%" }}>
           <Image
             p="2vw"
             w="100%"
@@ -45,8 +56,8 @@ const FirstSection = () => {
             alt="jiit Image"
           />
         </Box>
-        {/* {
-            !speakNow ?   <Box w={{ base: "100%", lg: "65%" }} order={{lg:'0'}} h={{  lg: "100%" }}>
+        {
+            !showMenu ?   <Box w={{ base: "100%", lg: "65%" }} order={{lg:'0'}} h={{  lg: "100%" }}>
             <Text
               ml={{ base: "4vw", lg: "4vw" }}
               mt={{ lg: "6vw" }}
@@ -96,14 +107,13 @@ const FirstSection = () => {
                 </InputRightElement>
               </Tooltip>
             </InputGroup>
-          </Box> :
-          <Box w={{ base: "100%", lg: "65%" }} h={{  lg: "100%" }}>
-            <Speaking speakNow={speakNow} setSpeakNow={setSpeakNow} />
-            </Box>
-        } */}
-        <Box w={{ base: "100%", lg: "65%" }} order={{lg:'0'}} h={{ base:'100%',  lg: "100%" }}>
-            <Directions />
-        </Box>
+          </Box> : speakNow && !showDirection ? <Box w={{ base: "100%", lg: "65%" }} h={{  lg: "100%" }}>
+            <Speaking setShowMenu={setShowMenu} speakNow={speakNow} setSpeakNow={setSpeakNow} />
+            </Box> :
+             <Box w={{ base: "100%", lg: "65%" }} order={{lg:'0'}} h={{ base:'100%',  lg: "100%" }}>
+             <Directions setSpeakNow={setSpeakNow}  setShowDirection={setShowDirection} data={data} />
+         </Box>
+        }
       </Box>
     </>
   );

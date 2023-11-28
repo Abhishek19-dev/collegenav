@@ -6,7 +6,7 @@ import { UilStopwatchSlash } from '@iconscout/react-unicons'
 import { useDispatch, useSelector } from "react-redux";
 import { RUN_PYTHON_CODE_RESET } from "../redux/actionType";
 
-const Speaking = ({speakNow , setSpeakNow}) => {
+const Speaking = ({speakNow , setSpeakNow , setShowMenu}) => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -18,6 +18,7 @@ const Speaking = ({speakNow , setSpeakNow}) => {
   const dispatch = useDispatch()
   const handleStopSpeak = ()=>{
     setSpeakNow(false)
+    setShowMenu(false)
      dispatch({
         type : RUN_PYTHON_CODE_RESET
      })
