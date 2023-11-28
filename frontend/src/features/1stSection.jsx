@@ -16,6 +16,7 @@ import microphone from "../images/microphone.png";
 import Speaking from "./Speaking";
 import { useDispatch } from "react-redux";
 import { RunPythonAction } from "../redux/actions/runPythonAction";
+import Directions from "./Directions";
 
 const FirstSection = () => {
     const [speakNow , setSpeakNow] = useState(false)
@@ -44,7 +45,7 @@ const FirstSection = () => {
             alt="jiit Image"
           />
         </Box>
-        {
+        {/* {
             !speakNow ?   <Box w={{ base: "100%", lg: "65%" }} order={{lg:'0'}} h={{  lg: "100%" }}>
             <Text
               ml={{ base: "4vw", lg: "4vw" }}
@@ -90,7 +91,6 @@ const FirstSection = () => {
                   mr={{ base: "1vw", lg: "1vw" }}
                 >
                   <IconButton onClick={handleOnSpeak} bg="transparent" _hover={{ bg: "transparent" }}>
-                    {/* <UilMicrophone color="green.500" /> */}
                     <Image w="6vw" src={microphone}></Image>
                   </IconButton>
                 </InputRightElement>
@@ -100,9 +100,10 @@ const FirstSection = () => {
           <Box w={{ base: "100%", lg: "65%" }} h={{  lg: "100%" }}>
             <Speaking speakNow={speakNow} setSpeakNow={setSpeakNow} />
             </Box>
-        }
-      
-      
+        } */}
+        <Box w={{ base: "100%", lg: "65%" }} order={{lg:'0'}} h={{ base:'100%',  lg: "100%" }}>
+            <Directions />
+        </Box>
       </Box>
     </>
   );
