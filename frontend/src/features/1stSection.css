@@ -1,0 +1,12 @@
+slide-in-element {
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideInAnimation 0.5s ease-in-out forwards;
+  }
+  
+  @keyframes slideInAnimation {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }

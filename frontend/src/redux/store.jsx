@@ -2,9 +2,13 @@ import {legacy_createStore as createStore  , combineReducers , applyMiddleware} 
 import thunk from 'redux-thunk'
 import {composeWithDevTools} from "redux-devtools-extension" 
 import { RunPythonReducer } from './reducers/runPythonReducer'
+import { loginReducer, logoutReducer, registerReducer } from './reducers/userReducer'
 
 const reducer = combineReducers({
-  runPython : RunPythonReducer
+  runPython : RunPythonReducer,
+  loginUser : loginReducer,
+  logOut : logoutReducer,
+  registerUser : registerReducer
 })
 
 let initialState = {}

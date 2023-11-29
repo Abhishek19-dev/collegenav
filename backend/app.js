@@ -12,8 +12,10 @@ app.use(bodyParser.urlencoded({extended:true}))
 
 //router imports
 const runPython = require('./routes/PythonCodeRoutes')
+const userRoute = require('./routes/userRoute')
 
 //use routes
 app.use('/api/v1',runPython.router)
+app.use('/api/v1',userRoute.router)
 
 module.exports = app

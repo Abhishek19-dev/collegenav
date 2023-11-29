@@ -17,26 +17,39 @@ import Speaking from "./Speaking";
 import { useDispatch, useSelector } from "react-redux";
 import { RunPythonAction } from "../redux/actions/runPythonAction";
 import Directions from "./Directions";
-
+import "./1stSection.css";
 const FirstSection = () => {
-    const [speakNow , setSpeakNow] = useState(false)
-    const [showDirection , setShowDirection] = useState(false)
-    const [showMenu , setShowMenu] = useState(false)
-    const dispatch = useDispatch()
+  const [speakNow, setSpeakNow] = useState(false);
+  const [showDirection, setShowDirection] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [animate, setAnimate] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // Set animate to true after the component is mounted to trigger the animation
+    setAnimate(true);
 
-    const handleOnSpeak = ()=>{
-        dispatch(RunPythonAction)
-        setSpeakNow(true)
-        setShowMenu(true)
+    // Set animate to false after the animation duration
+    const animationTimeout = setTimeout(() => {
+      setAnimate(false);
+    }, 500); // Adjust the duration to match your animation duration
+
+    // Clear the timeout to prevent memory leaks
+    return () => clearTimeout(animationTimeout);
+  }, []);
+
+  const handleOnSpeak = () => {
+    dispatch(RunPythonAction);
+    setSpeakNow(true);
+    setShowMenu(true);
+  };
+  const { loading, data, isGetData } = useSelector((state) => state.runPython);
+
+  useEffect(() => {
+    if (isGetData) {
+      console.log("inside get data");
+      setShowDirection(true);
     }
-    const {loading , data , isGetData} = useSelector((state)=> state.runPython)
-
-    useEffect(()=>{
-     if(isGetData){
-      console.log("inside get data")
-      setShowDirection(true)
-     } 
-    },[isGetData,showDirection])
+  }, [isGetData, showDirection]);
   return (
     <>
       {/* <Box bg='red' w='100%'  h={{ base: `calc(100% - 25vw)`,md: `calc(100% - 18vw)`,lg: `calc(100% - 6vw)`}}> */}
@@ -47,7 +60,14 @@ const FirstSection = () => {
         display={{ base: "block", lg: "flex" }}
         flexDirection="row"
       >
-          <Box order={{lg:'1'}} mb={{base:'3vw' , lg:'0vw'}} w={{ lg: "40%" }} bg="#CFEBB7" h={{base:'60%', lg: "100%" }}>
+        <Box
+          className={animate ? "slide-in-element" : ""}
+          order={{ lg: "1" }}
+          mb={{ base: "3vw", lg: "0vw" }}
+          w={{ lg: "40%" }}
+          bg="#CFEBB7"
+          h={{ base: "60%", lg: "100%" }}
+        >
           <Image
             p="2vw"
             w="100%"
@@ -56,8 +76,12 @@ const FirstSection = () => {
             alt="jiit Image"
           />
         </Box>
-        {
-            !showMenu ?   <Box w={{ base: "100%", lg: "65%" }} order={{lg:'0'}} h={{  lg: "100%" }}>
+        {!showMenu ? (
+          <Box
+            w={{ base: "100%", lg: "65%" }}
+            order={{ lg: "0" }}
+            h={{ lg: "100%" }}
+          >
             <Text
               ml={{ base: "4vw", lg: "4vw" }}
               mt={{ lg: "6vw" }}
@@ -76,8 +100,8 @@ const FirstSection = () => {
               fontWeight={500}
             >
               Where I, your AI guide, make navigating through classes , teachers
-              cabin an effortless journey, unlocking the possibilities of seamless
-              exploration and discovery.
+              cabin an effortless journey, unlocking the possibilities of
+              seamless exploration and discovery.
             </Text>
             <InputGroup
               bg="#EFF8E7"
@@ -90,7 +114,7 @@ const FirstSection = () => {
                 bg="white"
                 borderRadius="25vw"
                 placeholder="Write or speak your classroom or teacher's name"
-                fontFamily='Nunito'
+                fontFamily="Nunito"
                 fontWeight={400}
                 fontSize={{ base: "0.8rem", lg: "1.2rem" }} // Adjust the font size for different screen sizes
               />
@@ -101,19 +125,43 @@ const FirstSection = () => {
                   mt={{ lg: "0.9vw" }}
                   mr={{ base: "1vw", lg: "1vw" }}
                 >
-                  <IconButton onClick={handleOnSpeak} bg="transparent" _hover={{ bg: "transparent" }}>
+                  <IconButton
+                    onClick={handleOnSpeak}
+                    bg="transparent"
+                    _hover={{ bg: "transparent" }}
+                  >
                     <Image w="6vw" src={microphone}></Image>
                   </IconButton>
                 </InputRightElement>
               </Tooltip>
             </InputGroup>
-          </Box> : speakNow && !showDirection ? <Box w={{ base: "100%", lg: "65%" }} h={{  lg: "100%" }}>
-            <Speaking setShowMenu={setShowMenu} speakNow={speakNow} setSpeakNow={setSpeakNow} />
-            </Box> :
-             <Box w={{ base: "100%", lg: "65%" }} order={{lg:'0'}} h={{ base:'100%',  lg: "100%" }}>
-             <Directions setSpeakNow={setSpeakNow}  setShowDirection={setShowDirection} data={data} />
-         </Box>
-        }
+          </Box>
+        ) : speakNow && !showDirection ? (
+          <Box
+            transition="transform 0.5s ease-in-out"
+            transform={speakNow && !showDirection  ? "translateX(0)" : "translateX(100%)"}
+            w={{ base: "100%", lg: "65%" }}
+            h={{ lg: "100%" }}
+          >
+            <Speaking
+              setShowMenu={setShowMenu}
+              speakNow={speakNow}
+              setSpeakNow={setSpeakNow}
+            />
+          </Box>
+        ) : (
+          <Box
+            w={{ base: "100%", lg: "65%" }}
+            order={{ lg: "0" }}
+            h={{ base: "100%", lg: "100%" }}
+          >
+            <Directions
+              setSpeakNow={setSpeakNow}
+              setShowDirection={setShowDirection}
+              data={data}
+            />
+          </Box>
+        )}
       </Box>
     </>
   );
