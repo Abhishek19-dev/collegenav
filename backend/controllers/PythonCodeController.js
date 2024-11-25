@@ -9,7 +9,7 @@ exports.RunPythonCode = (req, res, next) => {
 
  
     // exec(`python3 ${pythonScript} ${number}`, (error, stdout, stderr) => {
-    exec(`python3 ${pythonScript}`, (error, stdout, stderr) => {
+    exec(`python ${pythonScript}`, (error, stdout, stderr) => {
        if (error) {
           console.error(`Error executing Python script: ${error.message}`);
           res.status(401).json({ error: 'Internal Server Error' });
